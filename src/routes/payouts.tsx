@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Wallet, ArrowDownLeft, BadgeIndianRupee, Building2, Smartphone } from "lucide-react";
+import { Wallet, ArrowDownLeft, CircleDollarSign, Building2, CreditCard } from "lucide-react";
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { BottomNav } from "@/components/mobile/BottomNav";
 import { StatusBadge } from "@/components/mobile/StatusBadge";
@@ -24,20 +24,27 @@ function Payouts() {
           <div className="relative flex items-center justify-between">
             <div>
               <p className="text-[11px] text-white/70 font-medium">Available balance</p>
-              <p className="text-3xl font-bold mt-1 tracking-tight">₹{total.toLocaleString()}</p>
+              <p className="text-3xl font-bold mt-1 tracking-tight">${total.toLocaleString()}</p>
             </div>
             <div className="size-12 rounded-2xl bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center">
               <Wallet className="size-6" />
             </div>
           </div>
           <div className="relative mt-5 grid grid-cols-3 gap-2 text-center">
-            <Mini label="This week" value="₹750" />
-            <Mini label="This month" value="₹2,450" />
-            <Mini label="Lifetime" value="₹14,300" />
+            <Mini label="This week" value="$750" />
+            <Mini label="This month" value="$2,450" />
+            <Mini label="Lifetime" value="$14,300" />
           </div>
           <div className="relative mt-5 flex gap-2">
-            <Button className="flex-1 h-11 rounded-2xl bg-white text-primary hover:bg-white/90 font-semibold">Withdraw</Button>
-            <Button variant="ghost" className="h-11 px-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold">Statement</Button>
+            <Button className="flex-1 h-11 rounded-2xl bg-white text-primary hover:bg-white/90 font-semibold">
+              Withdraw
+            </Button>
+            <Button
+              variant="ghost"
+              className="h-11 px-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold"
+            >
+              Statement
+            </Button>
           </div>
         </div>
       </div>
@@ -49,8 +56,16 @@ function Payouts() {
           <button className="text-xs font-semibold text-primary">+ Add</button>
         </div>
         <div className="space-y-2.5">
-          <Method icon={<Smartphone className="size-5" />} title="UPI · @arjun-okhdfc" sub="Default · Instant" />
-          <Method icon={<Building2 className="size-5" />} title="HDFC Bank ••4521" sub="Savings · 1-2 days" />
+          <Method
+            icon={<CreditCard className="size-5" />}
+            title="Visa Debit ••4521"
+            sub="Default · Instant"
+          />
+          <Method
+            icon={<Building2 className="size-5" />}
+            title="Chase Bank ••9142"
+            sub="Checking · 1-2 days"
+          />
         </div>
       </div>
 
@@ -66,10 +81,12 @@ function Payouts() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold text-sm truncate">{p.method}</p>
-                  <p className="font-bold text-sm">+₹{p.amount}</p>
+                  <p className="font-bold text-sm">+${p.amount}</p>
                 </div>
                 <div className="flex items-center justify-between mt-0.5">
-                  <p className="text-[11px] text-muted-foreground">{p.date} · {p.id}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {p.date} · {p.id}
+                  </p>
                   <StatusBadge status="paid" />
                 </div>
               </div>
@@ -94,12 +111,14 @@ function Mini({ label, value }: { label: string; value: string }) {
 function Method({ icon, title, sub }: { icon: React.ReactNode; title: string; sub: string }) {
   return (
     <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-card border border-border shadow-card">
-      <div className="size-11 rounded-xl bg-accent text-accent-foreground flex items-center justify-center">{icon}</div>
+      <div className="size-11 rounded-xl bg-accent text-accent-foreground flex items-center justify-center">
+        {icon}
+      </div>
       <div className="flex-1">
         <p className="font-semibold text-sm">{title}</p>
         <p className="text-[11px] text-muted-foreground">{sub}</p>
       </div>
-      <BadgeIndianRupee className="size-4 text-muted-foreground" />
+      <CircleDollarSign className="size-4 text-muted-foreground" />
     </div>
   );
 }

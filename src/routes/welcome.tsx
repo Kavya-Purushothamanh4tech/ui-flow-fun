@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShieldCheck, Camera, BadgeIndianRupee, ArrowRight } from "lucide-react";
+import { ShieldCheck, Camera, CircleDollarSign, ArrowRight } from "lucide-react";
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { Button } from "@/components/ui/button";
 
@@ -16,8 +16,14 @@ function Welcome() {
             <div className="size-24 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-elevated">
               <ShieldCheck className="!size-12" strokeWidth={1.6} />
             </div>
-            <h1 className="mt-6 text-3xl font-bold text-center leading-tight">
-              Make your city<br/>safer, together.
+            <p className="mt-5 text-2xl font-bold tracking-tight">C.O.P</p>
+            <p className="mt-1 text-xs text-white/70 font-medium uppercase tracking-[0.22em]">
+              Citizens On Patrol
+            </p>
+            <h1 className="mt-7 text-3xl font-bold text-center leading-tight">
+              Make your city
+              <br />
+              safer, together.
             </h1>
             <p className="mt-3 text-center text-white/75 text-sm max-w-[280px]">
               Report traffic violations in seconds. Get rewarded when verified.
@@ -27,16 +33,38 @@ function Welcome() {
 
         <div className="flex-1 px-6 pt-6 pb-8 flex flex-col">
           <div className="space-y-3">
-            <Feature icon={<Camera className="size-5" />} title="Capture & Submit" desc="Photo or 30-sec video with auto GPS." />
-            <Feature icon={<ShieldCheck className="size-5" />} title="Verified by Officers" desc="Reviewed within 24 hours." />
-            <Feature icon={<BadgeIndianRupee className="size-5" />} title="Earn Rewards" desc="Up to ₹500 per approved report." />
+            <Feature
+              icon={<Camera className="size-5" />}
+              title="Capture & Submit"
+              desc="Photo or 30-sec video with auto GPS."
+            />
+            <Feature
+              icon={<ShieldCheck className="size-5" />}
+              title="Verified by Officers"
+              desc="Reviewed within 24 hours."
+            />
+            <Feature
+              icon={<CircleDollarSign className="size-5" />}
+              title="Earn Rewards"
+              desc="Up to $500 per approved report."
+            />
           </div>
 
           <div className="mt-auto space-y-3 pt-6">
-            <Button asChild size="lg" className="w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold">
-              <Link to="/signup">Create account <ArrowRight /></Link>
+            <Button
+              asChild
+              size="lg"
+              className="w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
+            >
+              <Link to="/signup">
+                Create account <ArrowRight />
+              </Link>
             </Button>
-            <Button asChild variant="ghost" className="w-full h-12 rounded-2xl text-base font-medium">
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full h-12 rounded-2xl text-base font-medium"
+            >
               <Link to="/signin">I already have an account</Link>
             </Button>
           </div>
@@ -49,7 +77,9 @@ function Welcome() {
 function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
     <div className="flex items-center gap-4 p-3.5 rounded-2xl bg-card border border-border shadow-sm">
-      <div className="size-11 rounded-xl bg-accent text-accent-foreground flex items-center justify-center">{icon}</div>
+      <div className="size-11 rounded-xl bg-accent text-accent-foreground flex items-center justify-center">
+        {icon}
+      </div>
       <div className="flex-1">
         <p className="font-semibold text-sm">{title}</p>
         <p className="text-xs text-muted-foreground">{desc}</p>
