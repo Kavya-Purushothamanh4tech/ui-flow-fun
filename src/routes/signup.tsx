@@ -1,5 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Mail, Phone, Lock, KeyRound, User, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  CheckCircle2,
+  Home,
+  KeyRound,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { Button } from "@/components/ui/button";
@@ -23,36 +35,35 @@ function SignUp() {
       </div>
       <div className="px-6 pb-8 flex-1 overflow-y-auto no-scrollbar">
         <BrandHero />
-        <h1 className="text-center text-2xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="text-center text-2xl font-bold tracking-tight">Sign up</h1>
         <p className="text-center text-sm text-muted-foreground mt-1">
-          Join thousands keeping streets safer.
+          Complete your account details to register with Citizens On Patrol.
         </p>
 
         <div className="mt-7 space-y-4">
           <Field
-            icon={<User className="size-4" />}
-            label="Full name"
-            placeholder="Michael Carter"
-          />
-          <Field
             icon={<Mail className="size-4" />}
-            label="Email address"
+            label="Email ID"
             placeholder="michael.carter@example.com"
             type="email"
+            helper="This email ID will be used as your user ID and must be validated with an OTP."
+            actionLabel="Validate email"
           />
           <Field
             icon={<Phone className="size-4" />}
-            label="Phone number"
+            label="Phone"
             placeholder="+1 (555) 123-4567"
             type="tel"
+            helper="Used for additional authentication, OTP delivery, and account notifications."
+            actionLabel="Validate phone"
           />
-
           <div className="space-y-2">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Authentication mode
             </Label>
             <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-muted">
               <button
+                type="button"
                 onClick={() => setMode("otp")}
                 className={cn(
                   "h-10 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2",
@@ -62,6 +73,7 @@ function SignUp() {
                 <KeyRound className="size-4" /> OTP
               </button>
               <button
+                type="button"
                 onClick={() => setMode("password")}
                 className={cn(
                   "h-10 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2",
@@ -75,22 +87,35 @@ function SignUp() {
             </div>
           </div>
 
-          {mode === "password" && (
-            <div className="space-y-4 animate-fade-up">
-              <Field
-                icon={<Lock className="size-4" />}
-                label="Password"
-                placeholder="••••••••"
-                type="password"
-              />
-              <Field
-                icon={<Lock className="size-4" />}
-                label="Confirm password"
-                placeholder="••••••••"
-                type="password"
-              />
-            </div>
-          )}
+          <div className={cn("space-y-4", mode === "password" ? "animate-fade-up" : "hidden")}>
+            <Field
+              icon={<Lock className="size-4" />}
+              label="Password"
+              placeholder="••••••••"
+              type="password"
+            />
+            <Field
+              icon={<Lock className="size-4" />}
+              label="Confirm password"
+              placeholder="••••••••"
+              type="password"
+            />
+          </div>
+
+          <Field icon={<User className="size-4" />} label="First name" placeholder="Michael" />
+          <Field icon={<User className="size-4" />} label="Last name" placeholder="Carter" />
+          <Field
+            icon={<BadgeCheck className="size-4" />}
+            label="ID proof"
+            placeholder="Driver license, passport, or state ID"
+          />
+          <Field icon={<Home className="size-4" />} label="Address" placeholder="1427 Oak Street" />
+          <Field
+            icon={<MapPin className="size-4" />}
+            label="Zip code"
+            placeholder="94107"
+            inputMode="numeric"
+          />
         </div>
 
         <Button
@@ -98,11 +123,10 @@ function SignUp() {
           size="lg"
           className="mt-8 w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
         >
-          <Link to="/otp">Continue</Link>
+          <Link to="/signin">Create account</Link>
         </Button>
         <p className="text-center text-xs text-muted-foreground mt-4">
-          By continuing you agree to our <span className="text-primary font-medium">Terms</span> &{" "}
-          <span className="text-primary font-medium">Privacy Policy</span>.
+          Your identity details are used to verify account access and keep reports accountable.
         </p>
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already a member?{" "}
@@ -133,10 +157,17 @@ function BrandHero() {
 }
 
 function Field({
+  actionLabel,
+  helper,
   icon,
   label,
   ...rest
-}: { icon: React.ReactNode; label: string } & React.ComponentProps<"input">) {
+}: {
+  actionLabel?: string;
+  helper?: string;
+  icon: React.ReactNode;
+  label: string;
+} & React.ComponentProps<"input">) {
   return (
     <div className="space-y-1.5">
       <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
@@ -148,6 +179,16 @@ function Field({
         </span>
         <Input {...rest} className="h-12 pl-10 rounded-2xl bg-card border-border text-sm" />
       </div>
+      {helper && <p className="text-xs leading-relaxed text-muted-foreground">{helper}</p>}
+      {actionLabel && (
+        <button
+          type="button"
+          className="inline-flex h-8 items-center gap-1.5 rounded-xl px-3 text-xs font-semibold text-primary hover:bg-primary/10"
+        >
+          <CheckCircle2 className="size-3.5" />
+          {actionLabel}
+        </button>
+      )}
     </div>
   );
 }
