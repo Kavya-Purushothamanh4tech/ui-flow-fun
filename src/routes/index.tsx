@@ -6,8 +6,8 @@ import { PhoneShell } from "@/components/mobile/PhoneShell";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Citizens On Patrol — Report. Earn. Protect." },
-      { name: "description", content: "Premium citizen-led traffic violation reporting app." },
+      { title: "citizen on patrol" },
+      { name: "description", content: "" },
     ],
   }),
   component: Splash,
