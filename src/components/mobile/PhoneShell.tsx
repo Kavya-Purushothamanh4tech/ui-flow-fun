@@ -13,7 +13,7 @@ export function PhoneShell({
   bg?: string;
 }) {
   return (
-    <div className="min-h-screen w-full flex items-stretch justify-center bg-muted/40 dark">
+    <div className="min-h-screen w-full flex items-stretch justify-center bg-muted/40">
       <div
         className={cn(
           "relative w-full max-w-[420px] min-h-screen flex flex-col overflow-hidden",
