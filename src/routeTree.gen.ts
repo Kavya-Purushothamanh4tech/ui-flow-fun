@@ -10,12 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as VerifyProfileOtpRouteImport } from './routes/verify-profile-otp'
+import { Route as VerifyOtpRouteImport } from './routes/verify-otp'
 import { Route as SubmitRouteImport } from './routes/submit'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PayoutsRouteImport } from './routes/payouts'
-import { Route as OtpRouteImport } from './routes/otp'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -26,6 +27,16 @@ import { Route as AdminViolationsRouteImport } from './routes/admin.violations'
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyProfileOtpRoute = VerifyProfileOtpRouteImport.update({
+  id: '/verify-profile-otp',
+  path: '/verify-profile-otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyOtpRoute = VerifyOtpRouteImport.update({
+  id: '/verify-otp',
+  path: '/verify-otp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubmitRoute = SubmitRouteImport.update({
@@ -51,11 +62,6 @@ const ProfileRoute = ProfileRouteImport.update({
 const PayoutsRoute = PayoutsRouteImport.update({
   id: '/payouts',
   path: '/payouts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OtpRoute = OtpRouteImport.update({
-  id: '/otp',
-  path: '/otp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoryRoute = HistoryRouteImport.update({
@@ -94,12 +100,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/history': typeof HistoryRoute
-  '/otp': typeof OtpRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/submit': typeof SubmitRoute
+  '/verify-otp': typeof VerifyOtpRoute
+  '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -109,12 +116,13 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/history': typeof HistoryRoute
-  '/otp': typeof OtpRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/submit': typeof SubmitRoute
+  '/verify-otp': typeof VerifyOtpRoute
+  '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -125,12 +133,13 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/history': typeof HistoryRoute
-  '/otp': typeof OtpRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/submit': typeof SubmitRoute
+  '/verify-otp': typeof VerifyOtpRoute
+  '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -142,12 +151,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/history'
-    | '/otp'
     | '/payouts'
     | '/profile'
     | '/signin'
     | '/signup'
     | '/submit'
+    | '/verify-otp'
+    | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
     | '/violation/$id'
@@ -157,12 +167,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/history'
-    | '/otp'
     | '/payouts'
     | '/profile'
     | '/signin'
     | '/signup'
     | '/submit'
+    | '/verify-otp'
+    | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
     | '/violation/$id'
@@ -172,12 +183,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/history'
-    | '/otp'
     | '/payouts'
     | '/profile'
     | '/signin'
     | '/signup'
     | '/submit'
+    | '/verify-otp'
+    | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
     | '/violation/$id'
@@ -188,12 +200,13 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   DashboardRoute: typeof DashboardRoute
   HistoryRoute: typeof HistoryRoute
-  OtpRoute: typeof OtpRoute
   PayoutsRoute: typeof PayoutsRoute
   ProfileRoute: typeof ProfileRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
   SubmitRoute: typeof SubmitRoute
+  VerifyOtpRoute: typeof VerifyOtpRoute
+  VerifyProfileOtpRoute: typeof VerifyProfileOtpRoute
   WelcomeRoute: typeof WelcomeRoute
   ViolationIdRoute: typeof ViolationIdRoute
 }
@@ -205,6 +218,20 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/welcome'
       preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-profile-otp': {
+      id: '/verify-profile-otp'
+      path: '/verify-profile-otp'
+      fullPath: '/verify-profile-otp'
+      preLoaderRoute: typeof VerifyProfileOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-otp': {
+      id: '/verify-otp'
+      path: '/verify-otp'
+      fullPath: '/verify-otp'
+      preLoaderRoute: typeof VerifyOtpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/submit': {
@@ -240,13 +267,6 @@ declare module '@tanstack/react-router' {
       path: '/payouts'
       fullPath: '/payouts'
       preLoaderRoute: typeof PayoutsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/otp': {
-      id: '/otp'
-      path: '/otp'
-      fullPath: '/otp'
-      preLoaderRoute: typeof OtpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/history': {
@@ -309,12 +329,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   DashboardRoute: DashboardRoute,
   HistoryRoute: HistoryRoute,
-  OtpRoute: OtpRoute,
   PayoutsRoute: PayoutsRoute,
   ProfileRoute: ProfileRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
   SubmitRoute: SubmitRoute,
+  VerifyOtpRoute: VerifyOtpRoute,
+  VerifyProfileOtpRoute: VerifyProfileOtpRoute,
   WelcomeRoute: WelcomeRoute,
   ViolationIdRoute: ViolationIdRoute,
 }

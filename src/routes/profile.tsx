@@ -1,75 +1,141 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
+  ArrowLeft,
   ChevronRight,
-  Settings,
-  Shield,
-  Bell,
-  HelpCircle,
-  LogOut,
-  Award,
-  Star,
-  Edit3,
+  CreditCard,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User,
 } from "lucide-react";
+import { useState } from "react";
+
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { BottomNav } from "@/components/mobile/BottomNav";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export const Route = createFileRoute("/profile")({ component: Profile });
+export const Route = createFileRoute("/profile")({
+  component: Profile,
+});
 
 function Profile() {
+  const navigate = useNavigate();
+
+  const [profile, setProfile] = useState({
+    phone: "+1 (555) 123-4567",
+    firstName: "Michael",
+    lastName: "Carter",
+    address: "1427 Oak Street",
+    zipCode: "94107",
+    idStatus: "Not Verified",
+  });
+
+  const handleSave = () => {
+    // later backend API call comes here
+    navigate({ to: "/verify-profile-otp" });
+  };
+
   return (
     <PhoneShell>
-      <div className="bg-gradient-hero text-primary-foreground rounded-b-[36px] px-6 pt-3 pb-20 relative overflow-hidden">
+      <div className="bg-gradient-hero text-primary-foreground rounded-b-[36px] px-6 pt-4 pb-10 relative overflow-hidden">
         <div className="absolute -top-10 -right-10 size-48 rounded-full bg-primary-glow/30 blur-3xl" />
+
         <div className="relative flex items-center justify-between">
-          <p className="font-semibold">Profile</p>
-          <button className="size-9 rounded-full bg-white/15 border border-white/20 flex items-center justify-center">
-            <Settings className="size-4" />
-          </button>
+          <Link
+            to="/dashboard"
+            className="size-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center"
+          >
+            <ArrowLeft className="size-5" />
+          </Link>
+
+          <p className="font-semibold text-lg">
+            Profile
+          </p>
+
+          <div className="size-10" />
         </div>
-        <div className="relative mt-6 flex flex-col items-center text-center">
-          <div className="relative">
-            <div className="size-20 rounded-full bg-white/15 border border-white/20 backdrop-blur flex items-center justify-center text-2xl font-bold">
-              MC
-            </div>
-            <button className="absolute -bottom-1 -right-1 size-7 rounded-full bg-white text-primary flex items-center justify-center shadow-elevated">
-              <Edit3 className="size-3.5" />
-            </button>
+
+        <div className="relative mt-8 flex flex-col items-center text-center">
+          <div className="relative size-20 rounded-full bg-white/15 border border-white/20 backdrop-blur flex items-center justify-center">
+            <ShieldCheck className="size-10" />
           </div>
-          <h2 className="mt-3 text-lg font-bold">Michael Carter</h2>
-          <p className="text-xs text-white/70">michael.carter@example.com · +1 (555) 123-4567</p>
-          <div className="mt-3 inline-flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-full px-3 py-1 text-[11px] font-semibold">
-            <Award className="size-3.5" /> Gold Patroller
-          </div>
+
+          <h2 className="mt-4 text-lg font-bold">
+            {profile.firstName} {profile.lastName}
+          </h2>
+
+          <p className="text-sm text-white/70">
+            Update your account details
+          </p>
         </div>
       </div>
 
-      <div className="px-6 -mt-12 grid grid-cols-3 gap-2.5 relative z-10">
-        <Mini label="Reports" value="24" />
-        <Mini label="Approved" value="18" />
-        <Mini
-          label="Rating"
-          value="4.8"
-          icon={<Star className="size-3 fill-warning text-warning" />}
+      <div className="px-6 py-6 space-y-4">
+        <Field
+          label="Phone"
+          icon={<Phone className="size-4" />}
+          value={profile.phone}
+          onChange={(value) =>
+            setProfile({ ...profile, phone: value })
+          }
         />
-      </div>
 
-      <div className="px-6 mt-6 space-y-2.5">
-        <Section>
-          <Row icon={<Shield className="size-4" />} label="Account & Security" />
-          <Row icon={<Bell className="size-4" />} label="Notifications" rightHint="On" />
-          <Row icon={<Award className="size-4" />} label="Rewards & Badges" rightHint="3 new" />
-        </Section>
-        <Section>
-          <Row icon={<HelpCircle className="size-4" />} label="Help & Support" />
-          <Row icon={<Settings className="size-4" />} label="App preferences" />
-        </Section>
-        <Link
-          to="/welcome"
-          className="flex items-center justify-center gap-2 rounded-2xl bg-destructive/10 text-destructive p-3.5 font-semibold text-sm"
+        <Field
+          label="First Name"
+          icon={<User className="size-4" />}
+          value={profile.firstName}
+          onChange={(value) =>
+            setProfile({ ...profile, firstName: value })
+          }
+        />
+
+        <Field
+          label="Last Name"
+          icon={<User className="size-4" />}
+          value={profile.lastName}
+          onChange={(value) =>
+            setProfile({ ...profile, lastName: value })
+          }
+        />
+
+        <Field
+          label="Address"
+          icon={<MapPin className="size-4" />}
+          value={profile.address}
+          onChange={(value) =>
+            setProfile({ ...profile, address: value })
+          }
+        />
+
+        <Field
+          label="Zip Code"
+          icon={<MapPin className="size-4" />}
+          value={profile.zipCode}
+          onChange={(value) =>
+            setProfile({ ...profile, zipCode: value })
+          }
+        />
+
+        <MenuRow
+          icon={<CreditCard className="size-4" />}
+          label="Receive Payouts"
+        />
+
+        <MenuRow
+          icon={<ShieldCheck className="size-4" />}
+          label="Proof of ID"
+          hint={profile.idStatus}
+        />
+
+        <Button
+          size="lg"
+          className="mt-6 w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
+          onClick={handleSave}
         >
-          <LogOut className="size-4" /> Sign out
-        </Link>
-        <p className="text-center text-[11px] text-muted-foreground pt-2">v1.0.0 · Build 240</p>
+          Save Changes
+        </Button>
       </div>
 
       <BottomNav />
@@ -77,40 +143,65 @@ function Profile() {
   );
 }
 
-function Mini({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+function Field({
+  label,
+  icon,
+  value,
+  onChange,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  value: string;
+  onChange: (value: string) => void;
+}) {
   return (
-    <div className="rounded-2xl bg-card border border-border shadow-card p-3 text-center">
-      <div className="flex items-center justify-center gap-1 text-xl font-bold">
-        {value}
-        {icon}
+    <div className="space-y-1.5">
+      <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        {label}
+      </Label>
+
+      <div className="relative">
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+          {icon}
+        </span>
+
+        <Input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-12 pl-10 rounded-2xl bg-card border-border text-sm"
+        />
       </div>
-      <p className="text-[11px] text-muted-foreground mt-1">{label}</p>
     </div>
   );
 }
-function Section({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl bg-card border border-border shadow-card divide-y divide-border overflow-hidden">
-      {children}
-    </div>
-  );
-}
-function Row({
+
+function MenuRow({
   icon,
   label,
-  rightHint,
+  hint,
 }: {
   icon: React.ReactNode;
   label: string;
-  rightHint?: string;
+  hint?: string;
 }) {
   return (
-    <button className="w-full flex items-center gap-3 p-3.5 hover:bg-accent/40">
-      <div className="size-9 rounded-xl bg-accent text-accent-foreground flex items-center justify-center">
+    <button className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-card">
+      <div className="size-10 rounded-xl bg-accent flex items-center justify-center">
         {icon}
       </div>
-      <span className="flex-1 text-left text-sm font-medium">{label}</span>
-      {rightHint && <span className="text-[11px] text-muted-foreground">{rightHint}</span>}
+
+      <div className="flex-1 text-left">
+        <p className="text-sm font-medium">
+          {label}
+        </p>
+
+        {hint && (
+          <p className="text-xs text-muted-foreground mt-1">
+            {hint}
+          </p>
+        )}
+      </div>
+
       <ChevronRight className="size-4 text-muted-foreground" />
     </button>
   );
