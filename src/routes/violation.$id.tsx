@@ -32,7 +32,7 @@ function ViolationDetail() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
         <div className="absolute top-3 left-0 right-0 px-4 flex items-center justify-between">
           <button
-            onClick={() => nav({ to: "/admin/violations" })}
+            onClick={() => nav({ to: "/admin/violations",search: { tab: "queue" }, })}
             className="size-10 rounded-full bg-black/30 backdrop-blur text-white flex items-center justify-center"
           >
             <ArrowLeft className="size-5" />
@@ -163,7 +163,7 @@ function ViolationDetail() {
                 asChild
                 className={`flex-1 h-12 rounded-2xl font-semibold ${confirm === "approve" ? "bg-gradient-success text-success-foreground" : "bg-gradient-danger text-destructive-foreground"}`}
               >
-                <Link to="/admin/violations">Confirm</Link>
+                <Link to="/admin/violations" search={{ tab: "queue" }}>Confirm</Link>
               </Button>
             </div>
           </div>

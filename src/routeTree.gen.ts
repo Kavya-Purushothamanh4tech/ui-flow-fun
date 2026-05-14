@@ -22,7 +22,8 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ViolationIdRouteImport } from './routes/violation.$id'
-import { Route as AdminViolationsRouteImport } from './routes/admin.violations'
+import { Route as ReportIdRouteImport } from './routes/report.$id'
+import { Route as AdminViolationsRouteImport } from './routes/admin/violations'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -89,6 +90,11 @@ const ViolationIdRoute = ViolationIdRouteImport.update({
   path: '/violation/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportIdRoute = ReportIdRouteImport.update({
+  id: '/report/$id',
+  path: '/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminViolationsRoute = AdminViolationsRouteImport.update({
   id: '/violations',
   path: '/violations',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
+  '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
+  '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
   '/admin/violations': typeof AdminViolationsRoute
+  '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
+    | '/report/$id'
     | '/violation/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
+    | '/report/$id'
     | '/violation/$id'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/verify-profile-otp'
     | '/welcome'
     | '/admin/violations'
+    | '/report/$id'
     | '/violation/$id'
   fileRoutesById: FileRoutesById
 }
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   VerifyOtpRoute: typeof VerifyOtpRoute
   VerifyProfileOtpRoute: typeof VerifyProfileOtpRoute
   WelcomeRoute: typeof WelcomeRoute
+  ReportIdRoute: typeof ReportIdRoute
   ViolationIdRoute: typeof ViolationIdRoute
 }
 
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ViolationIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report/$id': {
+      id: '/report/$id'
+      path: '/report/$id'
+      fullPath: '/report/$id'
+      preLoaderRoute: typeof ReportIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/violations': {
       id: '/admin/violations'
       path: '/violations'
@@ -337,6 +357,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyOtpRoute: VerifyOtpRoute,
   VerifyProfileOtpRoute: VerifyProfileOtpRoute,
   WelcomeRoute: WelcomeRoute,
+  ReportIdRoute: ReportIdRoute,
   ViolationIdRoute: ViolationIdRoute,
 }
 export const routeTree = rootRouteImport

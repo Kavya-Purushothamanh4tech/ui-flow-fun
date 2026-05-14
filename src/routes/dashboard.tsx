@@ -115,7 +115,7 @@ function Dashboard() {
           {recent.map((v) => (
             <Link
               key={v.id}
-              to="/violation/$id"
+              to="/report/$id"
               params={{ id: v.id }}
               className="flex gap-3 p-2.5 rounded-2xl bg-card border border-border shadow-card"
             >

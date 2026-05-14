@@ -6,6 +6,7 @@ import {
   Phone,
   ShieldCheck,
 } from "lucide-react";
+import { useState } from "react";
 
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,10 @@ export const Route = createFileRoute("/signup")({
 });
 
 function SignUp() {
+  const [signUpMethod, setSignUpMethod] = useState<
+    "email" | "phone"
+  >("email");
+
   return (
     <PhoneShell noPadding>
       <div className="px-6 pt-2 pb-2 flex items-center gap-3">
@@ -36,32 +41,51 @@ function SignUp() {
         </h1>
 
         <p className="text-center text-sm text-muted-foreground mt-1">
-          Create your Citizens On Patrol account using email or phone number.
+          Create your Citizens On Patrol account.
         </p>
 
-        <div className="mt-7 space-y-4">
-          <Field
-            icon={<Mail className="size-4" />}
-            label="Email"
-            placeholder="michael.carter@example.com"
-            type="email"
-            helper="Use email or phone number to create your account."
-          />
+        {/* Toggle */}
+        <div className="mt-7 rounded-2xl bg-muted p-1 flex">
+          <button
+            onClick={() => setSignUpMethod("email")}
+            className={`flex-1 rounded-xl py-2 text-sm font-medium transition ${
+              signUpMethod === "email"
+                ? "bg-background shadow-sm text-foreground"
+                : "text-muted-foreground"
+            }`}
+          >
+            Email
+          </button>
 
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-xs font-medium text-muted-foreground uppercase">
-              OR
-            </span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          <button
+            onClick={() => setSignUpMethod("phone")}
+            className={`flex-1 rounded-xl py-2 text-sm font-medium transition ${
+              signUpMethod === "phone"
+                ? "bg-background shadow-sm text-foreground"
+                : "text-muted-foreground"
+            }`}
+          >
+            Phone
+          </button>
+        </div>
 
-          <Field
-            icon={<Phone className="size-4" />}
-            label="Phone"
-            placeholder="+1 (555) 123-4567"
-            type="tel"
-          />
+        <div className="mt-5 space-y-4">
+          {/* Dynamic Field */}
+          {signUpMethod === "email" ? (
+            <Field
+              icon={<Mail className="size-4" />}
+              label="Email"
+              placeholder="michael.carter@example.com"
+              type="email"
+            />
+          ) : (
+            <Field
+              icon={<Phone className="size-4" />}
+              label="Phone"
+              placeholder="+1 (555) 123-4567"
+              type="tel"
+            />
+          )}
 
           <Field
             icon={<Lock className="size-4" />}
@@ -83,17 +107,22 @@ function SignUp() {
           size="lg"
           className="mt-8 w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
         >
-          <Link to="/verify-otp">Create account</Link>
+          <Link to="/verify-otp">
+            Create account
+          </Link>
         </Button>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          Your account credentials are used to securely access Citizens On
-          Patrol services.
+          Your account credentials are used to securely access
+          Citizens On Patrol services.
         </p>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already a member?{" "}
-          <Link to="/signin" className="text-primary font-semibold">
+          <Link
+            to="/signin"
+            className="text-primary font-semibold"
+          >
             Sign in
           </Link>
         </p>
@@ -109,7 +138,10 @@ function BrandHero() {
         <div className="absolute inset-0 rounded-3xl bg-primary-glow/25 blur-2xl" />
 
         <div className="relative size-20 rounded-3xl bg-gradient-hero text-primary-foreground border border-white/20 flex items-center justify-center shadow-elevated">
-          <ShieldCheck className="!size-10" strokeWidth={1.6} />
+          <ShieldCheck
+            className="!size-10"
+            strokeWidth={1.6}
+          />
         </div>
       </div>
 
