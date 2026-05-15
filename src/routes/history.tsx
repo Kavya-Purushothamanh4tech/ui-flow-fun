@@ -25,7 +25,7 @@ function History() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-muted-foreground font-medium">Your activity</p>
-            <h1 className="text-2xl font-bold tracking-tight">My Reports</h1>
+            <h1 className="text-2xl font-bold tracking-tight">My Tickets</h1>
           </div>
           <button className="size-10 rounded-2xl bg-card border border-border flex items-center justify-center shadow-sm">
             <SlidersHorizontal className="size-4" />

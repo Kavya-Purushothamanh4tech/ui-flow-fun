@@ -7,7 +7,7 @@ export function BottomNav({ role = "user" }: { role?: "user" | "admin" }) {
 
   const userItems = [
     { to: "/dashboard", label: "Home", icon: Home },
-    { to: "/history", label: "Reports", icon: FileText },
+    { to: "/history", label: "Tickets", icon: FileText },
     { to: "/submit", label: "Report", icon: Plus, primary: true },
     { to: "/payouts", label: "Payouts", icon: Wallet },
     { to: "/profile", label: "Profile", icon: User },

@@ -74,7 +74,7 @@ function Dashboard() {
         />
         <Stat
           icon={<ShieldCheck className="size-4" />}
-          label="Reports"
+          label="Tickets"
           value="24"
           tint="bg-primary/15 text-primary"
         />
@@ -113,7 +113,7 @@ function Dashboard() {
       {/* Recent reports */}
       <div className="px-6 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-bold">Recent reports</h3>
+          <h3 className="text-sm font-bold">Recent tickets</h3>
           <Link to="/history" className="text-xs font-semibold text-primary">
             See all
           </Link>
