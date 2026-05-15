@@ -17,13 +17,17 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PayoutsRouteImport } from './routes/payouts'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ViolationIdRouteImport } from './routes/violation.$id'
 import { Route as ReportIdRouteImport } from './routes/report.$id'
 import { Route as AdminViolationsRouteImport } from './routes/admin/violations'
+import { Route as AdminProfileRouteImport } from './routes/admin/profile'
+import { Route as AdminPaymentsRouteImport } from './routes/admin/payments'
 
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
@@ -65,9 +69,19 @@ const PayoutsRoute = PayoutsRouteImport.update({
   path: '/payouts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -100,12 +114,24 @@ const AdminViolationsRoute = AdminViolationsRouteImport.update({
   path: '/violations',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProfileRoute = AdminProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/notifications': typeof NotificationsRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
@@ -114,6 +140,8 @@ export interface FileRoutesByFullPath {
   '/verify-otp': typeof VerifyOtpRoute
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -122,7 +150,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/notifications': typeof NotificationsRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
@@ -131,6 +161,8 @@ export interface FileRoutesByTo {
   '/verify-otp': typeof VerifyOtpRoute
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -140,7 +172,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/history': typeof HistoryRoute
+  '/notifications': typeof NotificationsRoute
   '/payouts': typeof PayoutsRoute
   '/profile': typeof ProfileRoute
   '/signin': typeof SigninRoute
@@ -149,6 +183,8 @@ export interface FileRoutesById {
   '/verify-otp': typeof VerifyOtpRoute
   '/verify-profile-otp': typeof VerifyProfileOtpRoute
   '/welcome': typeof WelcomeRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/violations': typeof AdminViolationsRoute
   '/report/$id': typeof ReportIdRoute
   '/violation/$id': typeof ViolationIdRoute
@@ -159,7 +195,9 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/forgot-password'
     | '/history'
+    | '/notifications'
     | '/payouts'
     | '/profile'
     | '/signin'
@@ -168,6 +206,8 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/verify-profile-otp'
     | '/welcome'
+    | '/admin/payments'
+    | '/admin/profile'
     | '/admin/violations'
     | '/report/$id'
     | '/violation/$id'
@@ -176,7 +216,9 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/forgot-password'
     | '/history'
+    | '/notifications'
     | '/payouts'
     | '/profile'
     | '/signin'
@@ -185,6 +227,8 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/verify-profile-otp'
     | '/welcome'
+    | '/admin/payments'
+    | '/admin/profile'
     | '/admin/violations'
     | '/report/$id'
     | '/violation/$id'
@@ -193,7 +237,9 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/dashboard'
+    | '/forgot-password'
     | '/history'
+    | '/notifications'
     | '/payouts'
     | '/profile'
     | '/signin'
@@ -202,6 +248,8 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/verify-profile-otp'
     | '/welcome'
+    | '/admin/payments'
+    | '/admin/profile'
     | '/admin/violations'
     | '/report/$id'
     | '/violation/$id'
@@ -211,7 +259,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   DashboardRoute: typeof DashboardRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HistoryRoute: typeof HistoryRoute
+  NotificationsRoute: typeof NotificationsRoute
   PayoutsRoute: typeof PayoutsRoute
   ProfileRoute: typeof ProfileRoute
   SigninRoute: typeof SigninRoute
@@ -282,11 +332,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PayoutsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -331,14 +395,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminViolationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminProfileRoute: typeof AdminProfileRoute
   AdminViolationsRoute: typeof AdminViolationsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminProfileRoute: AdminProfileRoute,
   AdminViolationsRoute: AdminViolationsRoute,
 }
 
@@ -348,7 +430,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   DashboardRoute: DashboardRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HistoryRoute: HistoryRoute,
+  NotificationsRoute: NotificationsRoute,
   PayoutsRoute: PayoutsRoute,
   ProfileRoute: ProfileRoute,
   SigninRoute: SigninRoute,

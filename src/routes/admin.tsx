@@ -17,6 +17,7 @@ import {
 import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { StatusBadge } from "@/components/mobile/StatusBadge";
 import { violations } from "@/lib/mock";
+import { BottomNav } from "@/components/mobile/BottomNav";
 
 export const Route = createFileRoute("/admin")({
   component: Admin,
@@ -58,10 +59,15 @@ function Admin() {
             </div>
           </div>
 
-          <button className="relative size-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center">
+          <Link
+            to="/notifications"
+            search={{ role: "admin" }}
+            className="relative size-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center"
+          >
             <Bell className="size-5" />
-            <span className="absolute top-2 right-2 size-2 rounded-full bg-warning ring-2 ring-[oklch(0.32_0.16_264)]" />
-          </button>
+
+            <span className="absolute top-2 right-2 size-2 rounded-full bg-warning ring-2 ring-white/30" />
+          </Link>
         </div>
 
         <div className="relative mt-6">
@@ -118,13 +124,13 @@ function Admin() {
         </Link>
 
         <Link
-          to="/admin/violations"
+          to="/admin/payments"
           search={{ tab: "all" }}
         >
           <Stat
             icon={<FileText className="size-5" />}
-            label="This week"
-            value="612"
+            label="Payment Track"
+            value="$270"
             tint="bg-primary/15 text-primary"
           />
         </Link>
@@ -225,6 +231,7 @@ function Admin() {
           ))}
         </div>
       </div>
+      <BottomNav role="admin" />
     </PhoneShell>
   );
 }

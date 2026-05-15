@@ -7,6 +7,10 @@ import {
   Phone,
   ShieldCheck,
   User,
+  Lock,
+  LogOut,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -24,6 +28,12 @@ function Profile() {
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
+
+  // Password visibility states
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [profile, setProfile] = useState({
     phone: "+1 (555) 123-4567",
@@ -34,12 +44,40 @@ function Profile() {
     idStatus: "Not Verified",
   });
 
+  // Change password states
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const handleSave = () => {
-    // Later backend API call comes here
-
     setIsEditing(false);
-
     navigate({ to: "/verify-profile-otp" });
+  };
+
+  const handleChangePassword = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Fill all password fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match");
+      return;
+    }
+
+    alert("Password changed successfully (mock)");
+
+    // reset
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setShowPasswordSection(false);
+  };
+
+  const handleLogout = () => {
+    // clear tokens later if you have auth
+    alert("Logged out");
+    navigate({ to: "/signin" });
   };
 
   return (
@@ -75,7 +113,6 @@ function Profile() {
             Update your account details
           </p>
 
-          {/* Edit Button */}
           <button
             onClick={() => setIsEditing(!isEditing)}
             className="mt-4 rounded-2xl border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur transition hover:bg-white/20"
@@ -137,6 +174,7 @@ function Profile() {
           }
         />
 
+        {/* MENU ITEMS */}
         <MenuRow
           icon={<CreditCard className="size-4" />}
           label="Receive Payouts"
@@ -148,7 +186,89 @@ function Profile() {
           hint={profile.idStatus}
         />
 
-        {/* Save Button */}
+        {/* CHANGE PASSWORD */}
+        <MenuRow
+          icon={<Lock className="size-4" />}
+          label="Change Password"
+          onClick={() => setShowPasswordSection(!showPasswordSection)}
+        />
+
+        {/* PASSWORD SECTION */}
+        {showPasswordSection && (
+          <div className="space-y-4 p-4 rounded-2xl border border-border bg-card shadow-card">
+            <p className="text-sm font-semibold">Change Password</p>
+
+            <div className="relative">
+              <Input
+                type={showCurrentPassword ? "text" : "password"}
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="h-12 rounded-2xl pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showCurrentPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+
+            <div className="relative">
+              <Input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="h-12 rounded-2xl pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showNewPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+
+            <div className="relative">
+              <Input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-12 rounded-2xl pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                className="flex-1 h-10 rounded-xl"
+                onClick={handleChangePassword}
+              >
+                Save
+              </Button>
+
+              <Button
+                variant="outline"
+                className="flex-1 h-10 rounded-xl"
+                onClick={() => setShowPasswordSection(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* SAVE PROFILE */}
         <Button
           size="lg"
           className="mt-6 w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
@@ -157,6 +277,17 @@ function Profile() {
         >
           Save Changes
         </Button>
+
+        {/* LOGOUT BUTTON */}
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full h-12 rounded-2xl border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
+          onClick={handleLogout}
+        >
+          <LogOut className="size-4 mr-2" />
+          Logout
+        </Button>
       </div>
 
       <BottomNav />
@@ -164,6 +295,7 @@ function Profile() {
   );
 }
 
+/* FIELD COMPONENT */
 function Field({
   label,
   icon,
@@ -192,31 +324,34 @@ function Field({
           value={value}
           disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
-          className={`
-            h-12 pl-10 rounded-2xl text-sm
-            ${
-              disabled
-                ? "bg-card border-border text-foreground opacity-100 cursor-default"
-                : "bg-card border-primary ring-2 ring-primary/20"
-            }
-          `}
+          className={`h-12 pl-10 rounded-2xl text-sm ${
+            disabled
+              ? "bg-card border-border text-foreground opacity-100 cursor-default"
+              : "bg-card border-primary ring-2 ring-primary/20"
+          }`}
         />
       </div>
     </div>
   );
 }
 
+/* MENU ROW */
 function MenuRow({
   icon,
   label,
   hint,
+  onClick,
 }: {
   icon: React.ReactNode;
   label: string;
   hint?: string;
+  onClick?: () => void;
 }) {
   return (
-    <button className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-card">
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-card"
+    >
       <div className="size-10 rounded-xl bg-accent flex items-center justify-center">
         {icon}
       </div>
