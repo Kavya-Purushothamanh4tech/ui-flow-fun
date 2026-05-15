@@ -51,7 +51,10 @@ function Profile() {
 
   const handleSave = () => {
     setIsEditing(false);
-    navigate({ to: "/verify-profile-otp" });
+    navigate({
+      to: "/verify-profile-otp",
+      search: { flow: "user-profile-update" },
+    });
   };
 
   const handleChangePassword = () => {
@@ -77,7 +80,7 @@ function Profile() {
   const handleLogout = () => {
     // clear tokens later if you have auth
     alert("Logged out");
-    navigate({ to: "/signin" });
+    navigate({ to: "/profile" });
   };
 
   return (
