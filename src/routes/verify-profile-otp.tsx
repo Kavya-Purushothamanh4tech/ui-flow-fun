@@ -12,23 +12,49 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/verify-profile-otp")({
-  component: VerifyProfileOtp,
+  component: VerifyOtp,
+  validateSearch: (search: Record<string, unknown>) => ({
+    flow: (search.flow as string) || "user-profile-update",
+  }),
 });
 
 type Status = "idle" | "error" | "success";
 
-function VerifyProfileOtp() {
+function VerifyOtp() {
   const navigate = useNavigate();
+  const { flow } = Route.useSearch();
 
   const [otp, setOtp] = useState("");
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [status, setStatus] = useState<Status>("idle");
 
-  const [message, setMessage] = useState(
-    "Enter the one-time passcode sent to your registered phone number or email address."
-  );
+  const [message, setMessage] = useState("");
 
-  // Generate random OTP
+  /* ---------------- FLOW CONFIG ---------------- */
+
+  const flowConfig: Record<
+    string,
+    { title: string; successRedirect: string }
+  > = {
+    "user-profile-update": {
+      title: "Verify Profile Update",
+      successRedirect: "/profile",
+    },
+    "admin-profile-update": {
+      title: "Verify Admin Profile Update",
+      successRedirect: "/admin/profile",
+    },
+    "password-change": {
+      title: "Verify Password Change",
+      successRedirect: "/signin",
+    },
+  };
+
+  const config =
+    flowConfig[flow] || flowConfig["user-profile-update"];
+
+  /* ---------------- OTP GENERATION ---------------- */
+
   const generateOtp = () => {
     const randomOtp = Math.floor(
       100000 + Math.random() * 900000
@@ -38,37 +64,81 @@ function VerifyProfileOtp() {
 
     console.log("Generated OTP:", randomOtp);
 
-    // temporary testing popup
     window.alert(`Test OTP: ${randomOtp}`);
   };
 
-  // Generate OTP when page loads
   useEffect(() => {
     generateOtp();
-  }, []);
+
+    setMessage(
+      "Enter the OTP sent to your registered phone number or email address."
+    );
+  }, [flow]);
+
+  /* ---------------- VERIFY OTP ---------------- */
 
   const handleVerifyOtp = () => {
-    console.log("Entered OTP:", otp);
-    console.log("Generated OTP:", generatedOtp);
+  if (otp.trim() === generatedOtp.trim()) {
+    setStatus("success");
 
-    if (otp.trim() === generatedOtp.trim()) {
-      setStatus("success");
+    setMessage(
+      "OTP verified successfully. Updating profile..."
+    );
 
-      setMessage(
-        "OTP verified successfully. Updating your profile..."
-      );
+    setTimeout(() => {
+      // apply pending update if exists
+      const pending =
+        sessionStorage.getItem(
+          "pending_update"
+        );
 
-      setTimeout(() => {
-        navigate({ to: "/dashboard" });
-      }, 1200);
-    } else {
-      setStatus("error");
+      if (pending) {
+        console.log(
+          "Applying update:",
+          JSON.parse(pending)
+        );
 
-      setMessage(
-        "Incorrect OTP. Please enter the correct OTP or request another one."
-      );
-    }
-  };
+        sessionStorage.removeItem(
+          "pending_update"
+        );
+      }
+
+      // redirect based on flow
+      switch (flow) {
+        case "admin-profile-update":
+          navigate({
+            to: "/admin",
+          });
+          break;
+
+        case "user-profile-update":
+          navigate({
+            to: "/dashboard",
+          });
+          break;
+
+        case "password-change":
+          navigate({
+            to: "/signin",
+          });
+          break;
+
+        default:
+          navigate({
+            to: "/profile",
+          });
+      }
+    }, 1200);
+  } else {
+    setStatus("error");
+
+    setMessage(
+      "Incorrect OTP. Please enter the correct OTP."
+    );
+  }
+};
+
+  /* ---------------- RESEND OTP ---------------- */
 
   const handleResendOtp = () => {
     generateOtp();
@@ -76,15 +146,22 @@ function VerifyProfileOtp() {
     setStatus("success");
 
     setMessage(
-      "A new one-time passcode has been sent to your registered email or phone number."
+      "A new OTP has been sent to your registered contact."
     );
   };
 
+  /* ---------------- UI ---------------- */
+
   return (
     <PhoneShell noPadding>
+      {/* HEADER */}
       <div className="px-6 pt-2 flex items-center">
         <Link
-          to="/profile"
+          to={
+            flow === "admin-profile-update"
+              ? "/admin/profile"
+              : "/profile"
+          }
           className="size-10 -ml-2 rounded-full flex items-center justify-center hover:bg-accent"
         >
           <ArrowLeft className="size-5" />
@@ -95,12 +172,11 @@ function VerifyProfileOtp() {
         <BrandHero />
 
         <h1 className="text-center text-2xl font-bold tracking-tight">
-          Verify Profile Update
+          {config.title}
         </h1>
 
         <p className="text-center text-sm text-muted-foreground mt-1.5">
-          Enter the OTP received on your registered phone or email to update
-          your profile.
+          Enter OTP to confirm this secure action.
         </p>
 
         <StatusNotice status={status} message={message} />
@@ -137,7 +213,7 @@ function VerifyProfileOtp() {
               onClick={handleResendOtp}
               className="mt-1 text-sm font-semibold text-primary hover:underline"
             >
-              Send another one time passcode
+              Resend OTP
             </button>
           </div>
         </div>
@@ -145,6 +221,8 @@ function VerifyProfileOtp() {
     </PhoneShell>
   );
 }
+
+/* ---------------- STATUS UI ---------------- */
 
 function StatusNotice({
   status,
@@ -164,8 +242,7 @@ function StatusNotice({
 
   return (
     <div
-      className={`mt-6 rounded-2xl border p-4 flex gap-3
-      ${
+      className={`mt-6 rounded-2xl border p-4 flex gap-3 ${
         isError
           ? "border-destructive/20 bg-destructive/10 text-destructive"
           : isSuccess
@@ -178,19 +255,21 @@ function StatusNotice({
       <div>
         <p className="text-sm font-semibold">
           {isError
-            ? "Incorrect OTP"
+            ? "Verification Failed"
             : isSuccess
-            ? "OTP Verified"
-            : "Verify OTP"}
+            ? "Verified"
+            : "Security Verification"}
         </p>
 
-        <p className="mt-1 text-xs leading-relaxed text-foreground/70">
+        <p className="mt-1 text-xs text-foreground/70">
           {message}
         </p>
       </div>
     </div>
   );
 }
+
+/* ---------------- HERO ---------------- */
 
 function BrandHero() {
   return (
@@ -204,11 +283,11 @@ function BrandHero() {
       </div>
 
       <p className="mt-4 text-2xl font-bold tracking-tight">
-        C.O.P
+        Secure Verification
       </p>
 
       <p className="mt-1 text-[11px] text-muted-foreground font-semibold uppercase tracking-[0.22em]">
-        Citizens On Patrol
+        One-Time Passcode
       </p>
     </div>
   );

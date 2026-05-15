@@ -2,8 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   User,
   ShieldCheck,
-  MapPin,
-  CreditCard,
   Lock,
   LogOut,
   ChevronRight,
@@ -14,7 +12,6 @@ import { PhoneShell } from "@/components/mobile/PhoneShell";
 import { BottomNav } from "@/components/mobile/BottomNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/admin/profile")({
   component: AdminProfile,
@@ -24,10 +21,14 @@ function AdminProfile() {
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordSection, setShowPasswordSection] =
+    useState(false);
 
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [currentPassword, setCurrentPassword] =
+    useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
 
   const [profile, setProfile] = useState({
     firstName: "David",
@@ -39,14 +40,42 @@ function AdminProfile() {
     zipCode: "10001",
   });
 
+  /* ---------------- SAVE PROFILE ---------------- */
+
   const handleSave = () => {
+    if (!isEditing) return;
+
+    // Store pending profile update
+    sessionStorage.setItem(
+      "pending_update",
+      JSON.stringify(profile)
+    );
+
     setIsEditing(false);
-    // later API call
+
+    // Navigate to OTP verification
+    navigate({
+      to: "/verify-profile-otp",
+      search: {
+        flow: "admin-profile-update",
+      },
+    });
   };
 
+  /* ---------------- CHANGE PASSWORD ---------------- */
+
   const handleChangePassword = () => {
-    if (!currentPassword || !newPassword) {
-      alert("Fill all fields");
+    if (
+      !currentPassword ||
+      !newPassword ||
+      !confirmPassword
+    ) {
+      alert("Fill all password fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match");
       return;
     }
 
@@ -54,8 +83,11 @@ function AdminProfile() {
 
     setCurrentPassword("");
     setNewPassword("");
-    setShowPassword(false);
+    setConfirmPassword("");
+    setShowPasswordSection(false);
   };
+
+  /* ---------------- LOGOUT ---------------- */
 
   const handleLogout = () => {
     navigate({ to: "/signin" });
@@ -73,10 +105,14 @@ function AdminProfile() {
           </div>
 
           <div>
-            <p className="text-xs text-white/70">Admin Officer</p>
+            <p className="text-xs text-white/70">
+              Admin Officer
+            </p>
+
             <p className="text-base font-semibold">
               {profile.firstName} {profile.lastName}
             </p>
+
             <p className="text-xs text-white/60">
               Badge ID: {profile.badgeId}
             </p>
@@ -85,14 +121,18 @@ function AdminProfile() {
 
         {/* EDIT BUTTON */}
         <button
-          onClick={() => setIsEditing(!isEditing)}
+          onClick={() =>
+            setIsEditing(!isEditing)
+          }
           className="mt-4 rounded-2xl border border-white/20 bg-white/15 px-4 py-2 text-sm"
         >
-          {isEditing ? "Cancel" : "Edit Profile"}
+          {isEditing
+            ? "Cancel"
+            : "Edit Profile"}
         </button>
       </div>
 
-      {/* PERSONAL INFO */}
+      {/* PROFILE INFO */}
       <div className="px-6 mt-6 space-y-4">
         <SectionTitle title="PERSONAL INFORMATION" />
 
@@ -101,7 +141,10 @@ function AdminProfile() {
           value={profile.firstName}
           disabled={!isEditing}
           onChange={(v) =>
-            setProfile({ ...profile, firstName: v })
+            setProfile({
+              ...profile,
+              firstName: v,
+            })
           }
         />
 
@@ -110,7 +153,10 @@ function AdminProfile() {
           value={profile.lastName}
           disabled={!isEditing}
           onChange={(v) =>
-            setProfile({ ...profile, lastName: v })
+            setProfile({
+              ...profile,
+              lastName: v,
+            })
           }
         />
 
@@ -119,7 +165,34 @@ function AdminProfile() {
           value={profile.role}
           disabled={!isEditing}
           onChange={(v) =>
-            setProfile({ ...profile, role: v })
+            setProfile({
+              ...profile,
+              role: v,
+            })
+          }
+        />
+
+        <Field
+          label="Address"
+          value={profile.address}
+          disabled={!isEditing}
+          onChange={(v) =>
+            setProfile({
+              ...profile,
+              address: v,
+            })
+          }
+        />
+
+        <Field
+          label="ZIP Code"
+          value={profile.zipCode}
+          disabled={!isEditing}
+          onChange={(v) =>
+            setProfile({
+              ...profile,
+              zipCode: v,
+            })
           }
         />
 
@@ -135,48 +208,38 @@ function AdminProfile() {
         <SectionTitle title="VERIFICATION" />
 
         <MenuRow
-          icon={<ShieldCheck className="size-4" />}
+          icon={
+            <ShieldCheck className="size-4" />
+          }
           label="Proof of ID"
           hint={profile.idStatus}
         />
-
-        <Field
-          label="Address"
-          value={profile.address}
-          disabled={!isEditing}
-          onChange={(v) =>
-            setProfile({ ...profile, address: v })
-          }
-        />
-
-        <Field
-          label="ZIP Code"
-          value={profile.zipCode}
-          disabled={!isEditing}
-          onChange={(v) =>
-            setProfile({ ...profile, zipCode: v })
-          }
-        />
       </div>
 
-      {/* ACCOUNT */}
+      {/* ACCOUNT SETTINGS */}
       <div className="px-6 mt-6 space-y-3">
         <SectionTitle title="ACCOUNT SETTINGS" />
 
         <MenuRow
           icon={<Lock className="size-4" />}
           label="Change Password"
-          onClick={() => setShowPassword(!showPassword)}
+          onClick={() =>
+            setShowPasswordSection(
+              !showPasswordSection
+            )
+          }
         />
 
-        {showPassword && (
+        {showPasswordSection && (
           <div className="p-4 border rounded-2xl bg-card space-y-3">
             <Input
               type="password"
               placeholder="Current Password"
               value={currentPassword}
               onChange={(e) =>
-                setCurrentPassword(e.target.value)
+                setCurrentPassword(
+                  e.target.value
+                )
               }
             />
 
@@ -185,35 +248,65 @@ function AdminProfile() {
               placeholder="New Password"
               value={newPassword}
               onChange={(e) =>
-                setNewPassword(e.target.value)
+                setNewPassword(
+                  e.target.value
+                )
               }
             />
 
-            <Button
-              className="w-full"
-              onClick={handleChangePassword}
-            >
-              Update Password
-            </Button>
+            <Input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) =>
+                setConfirmPassword(
+                  e.target.value
+                )
+              }
+            />
+
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                onClick={
+                  handleChangePassword
+                }
+              >
+                Update Password
+              </Button>
+
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() =>
+                  setShowPasswordSection(
+                    false
+                  )
+                }
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         )}
+      </div>
 
-        {/* SAVE */}
-        {isEditing && (
-          <Button
-            className="w-full mt-3"
-            onClick={handleSave}
-          >
-            Save Changes
-          </Button>
-        )}
+      {/* SAVE BUTTON */}
+      <div className="px-6 mt-6">
+        <Button
+          className="w-full h-12 rounded-2xl"
+          onClick={handleSave}
+          disabled={!isEditing}
+        >
+          Save Changes
+        </Button>
       </div>
 
       {/* LOGOUT */}
       <div className="px-6 mt-6 pb-10">
         <Button
           variant="outline"
-          className="w-full border-red-500 text-red-500"
+          className="w-full h-12 rounded-2xl border-red-500 text-red-500"
           onClick={handleLogout}
         >
           <LogOut className="size-4 mr-2" />
@@ -228,7 +321,11 @@ function AdminProfile() {
 
 /* ---------------- HELPERS ---------------- */
 
-function SectionTitle({ title }: { title: string }) {
+function SectionTitle({
+  title,
+}: {
+  title: string;
+}) {
   return (
     <p className="text-xs font-semibold text-muted-foreground tracking-wider">
       {title}
@@ -282,9 +379,15 @@ function MenuRow({
       className="w-full flex items-center justify-between p-4 border rounded-2xl bg-card"
     >
       <div className="flex items-center gap-3">
-        <div className="text-primary">{icon}</div>
+        <div className="text-primary">
+          {icon}
+        </div>
+
         <div className="text-left">
-          <p className="text-sm font-medium">{label}</p>
+          <p className="text-sm font-medium">
+            {label}
+          </p>
+
           {hint && (
             <p className="text-xs text-muted-foreground">
               {hint}
