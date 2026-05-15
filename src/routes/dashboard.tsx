@@ -34,10 +34,14 @@ function Dashboard() {
               <p className="text-sm font-semibold">Michael Carter</p>
             </div>
           </div>
-          <button className="relative size-10 rounded-full bg-white/15 backdrop-blur border border-white/20 flex items-center justify-center">
+          <Link
+            to="/notifications"
+            search={{ role: "user" }}
+            className="relative size-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center"
+          >
             <Bell className="size-5" />
-            <span className="absolute top-2 right-2 size-2 rounded-full bg-warning ring-2 ring-[oklch(0.32_0.16_264)]" />
-          </button>
+            <span className="absolute top-2 right-2 size-2 rounded-full bg-warning ring-2 ring-white/30" />
+          </Link>
         </div>
 
         <div className="relative mt-6">
@@ -82,11 +86,14 @@ function Dashboard() {
         <div className="grid grid-cols-2 gap-3">
           <Link
             to="/submit"
+            search={{ role: "user" }}
             className="relative overflow-hidden p-4 rounded-2xl bg-gradient-primary text-primary-foreground shadow-elevated"
           >
             <Camera className="size-6" />
             <p className="mt-3 font-semibold text-sm">Report Violation</p>
-            <p className="text-[11px] text-white/70 mt-0.5">Photo, video, or live</p>
+            <p className="text-[11px] text-white/70 mt-0.5">
+              Photo, video, or live
+            </p>
             <ArrowRight className="absolute bottom-3 right-3 size-4 opacity-70" />
           </Link>
           <Link

@@ -5,6 +5,8 @@ import {
   Mail,
   Phone,
   ShieldCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -22,6 +24,7 @@ function SignIn() {
 
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = () => {
     if (!emailOrPhone || !password) {
@@ -66,8 +69,6 @@ function SignIn() {
 
               <Input
                 className="h-12 pl-10 rounded-2xl bg-card text-sm"
-                placeholder="Enter email or phone number"
-                type="text"
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
               />
@@ -83,18 +84,34 @@ function SignIn() {
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
 
               <Input
-                type="password"
-                className="h-12 pl-10 rounded-2xl bg-card text-sm"
-                placeholder="••••••••"
+                type={showPassword ? "text" : "password"}
+                className="h-12 pl-10 pr-10 rounded-2xl bg-card text-sm"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+
+            <div className="flex justify-end mt-1">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-primary font-medium hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
           </div>
 
           <Button
             size="lg"
-            className="mt-4 w-full h-12 rounded-2xl bg-gradient-primary shadow-elevated text-base font-semibold"
+            className="w-full h-12 rounded-2xl bg-gradient-primary"
             onClick={handleSignIn}
           >
             Sign in
@@ -109,10 +126,7 @@ function SignIn() {
         </p>
 
         <p className="text-center text-xs text-muted-foreground mt-3">
-          <Link
-            to="/admin"
-            className="font-medium underline-offset-4 hover:underline"
-          >
+          <Link to="/admin" className="hover:underline">
             Sign in as Officer
           </Link>
         </p>

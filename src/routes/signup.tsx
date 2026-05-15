@@ -5,6 +5,8 @@ import {
   Mail,
   Phone,
   ShieldCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,6 +23,16 @@ function SignUp() {
   const [signUpMethod, setSignUpMethod] = useState<
     "email" | "phone"
   >("email");
+
+  // Password visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Form values
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <PhoneShell noPadding>
@@ -77,6 +89,8 @@ function SignUp() {
               label="Email"
               placeholder="michael.carter@example.com"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           ) : (
             <Field
@@ -84,22 +98,68 @@ function SignUp() {
               label="Phone"
               placeholder="+1 (555) 123-4567"
               type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           )}
 
-          <Field
-            icon={<Lock className="size-4" />}
-            label="Password"
-            placeholder="••••••••"
-            type="password"
-          />
+          {/* Password Field */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Password
+            </Label>
 
-          <Field
-            icon={<Lock className="size-4" />}
-            label="Confirm Password"
-            placeholder="••••••••"
-            type="password"
-          />
+            <div className="relative">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <Lock className="size-4" />
+              </span>
+
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="h-12 pl-10 pr-10 rounded-2xl bg-card border-border text-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Confirm Password Field */}
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Confirm Password
+            </Label>
+
+            <div className="relative">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <Lock className="size-4" />
+              </span>
+
+              <Input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="h-12 pl-10 pr-10 rounded-2xl bg-card border-border text-sm"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            </div>
+          </div>
         </div>
 
         <Button

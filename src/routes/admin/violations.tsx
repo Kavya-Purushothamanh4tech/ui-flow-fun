@@ -7,26 +7,20 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PhoneShell } from "@/components/mobile/PhoneShell";
+import { BottomNav } from "@/components/mobile/BottomNav";
 import { StatusBadge } from "@/components/mobile/StatusBadge";
 import { Input } from "@/components/ui/input";
 import { violations } from "@/lib/mock";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute(
-  "/admin/violations"
-)({
+export const Route = createFileRoute("/admin/violations")({
   validateSearch: (search) => ({
     tab: (search.tab as string) || "queue",
   }),
   component: AdminViolations,
 });
 
-const tabs = [
-  "Queue",
-  "Approved",
-  "Rejected",
-  "All",
-] as const;
+const tabs = ["Queue", "Approved", "Rejected", "All"] as const;
 
 function AdminViolations() {
   const search = Route.useSearch();
@@ -44,28 +38,21 @@ function AdminViolations() {
     }
   };
 
-  const [tab, setTab] = useState<
-    (typeof tabs)[number]
-  >(getTabFromSearch());
+  const [tab, setTab] = useState<(typeof tabs)[number]>(
+    getTabFromSearch()
+  );
 
-  // update tab whenever URL search changes
   useEffect(() => {
     setTab(getTabFromSearch());
   }, [search.tab]);
 
   const filtered = violations.filter((v) => {
     if (tab === "Queue") {
-      return (
-        v.status === "pending" ||
-        v.status === "review"
-      );
+      return v.status === "pending" || v.status === "review";
     }
 
     if (tab === "Approved") {
-      return (
-        v.status === "approved" ||
-        v.status === "paid"
-      );
+      return v.status === "approved" || v.status === "paid";
     }
 
     if (tab === "Rejected") {
@@ -77,7 +64,7 @@ function AdminViolations() {
 
   return (
     <PhoneShell>
-      {/* Header */}
+      {/* HEADER */}
       <div className="px-6 pt-2 pb-2 flex items-center justify-between">
         <Link
           to="/admin"
@@ -86,16 +73,14 @@ function AdminViolations() {
           <ArrowLeft className="size-5" />
         </Link>
 
-        <p className="font-semibold">
-          Violations
-        </p>
+        <p className="font-semibold">Violations</p>
 
         <button className="size-10 rounded-full hover:bg-accent flex items-center justify-center">
           <SlidersHorizontal className="size-4" />
         </button>
       </div>
 
-      {/* Search */}
+      {/* SEARCH */}
       <div className="px-6">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -106,7 +91,7 @@ function AdminViolations() {
           />
         </div>
 
-        {/* Tabs */}
+        {/* TABS */}
         <div className="mt-3 -mx-6 px-6 overflow-x-auto no-scrollbar">
           <div className="flex gap-2 pb-1">
             {tabs.map((t) => (
@@ -127,8 +112,8 @@ function AdminViolations() {
         </div>
       </div>
 
-      {/* List */}
-      <div className="px-6 mt-3 space-y-2.5 pb-8">
+      {/* LIST */}
+      <div className="px-6 mt-3 space-y-2.5 pb-24">
         {filtered.map((v) => (
           <Link
             key={v.id}
@@ -168,6 +153,9 @@ function AdminViolations() {
           </Link>
         ))}
       </div>
+
+      {/* ✅ FIX: Bottom navigation added */}
+      <BottomNav role="admin" />
     </PhoneShell>
   );
 }
