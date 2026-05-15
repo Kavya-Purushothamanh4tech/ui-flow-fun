@@ -46,7 +46,7 @@ export const violations: Violation[] = [
   },
   {
     id: "VR-2839",
-    category: "No Helmet",
+    category: "Not Wearing Seatbelt",
     vehicle: "IL AA3344",
     location: "Michigan Avenue, Chicago, IL 60611",
     date: "Yesterday, 6:48 PM",
@@ -63,7 +63,7 @@ export const violations: Violation[] = [
     date: "Yesterday, 2:20 PM",
     status: "pending",
     reward: 100,
-    thumb: thumbs[3],
+    thumb: thumbs[1],
     reporter: "Olivia B.",
   },
   {

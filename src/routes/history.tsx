@@ -66,7 +66,7 @@ function History() {
           filtered.map((v) => (
             <Link
               key={v.id}
-              to="/violation/$id"
+              to="/report/$id"
               params={{ id: v.id }}
               className="block rounded-3xl bg-card border border-border shadow-card overflow-hidden"
             >
